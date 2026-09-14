@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+:root {
+  --uaem-verde: #536855;
+  --uaem-verde-hover: #637C65;
+  --uaem-verde-ligero: #E5EBE6;
+  --uaem-dorado: #C89F5C;
+  --uaem-dorado-hover: #DAB67A;
+  --uaem-antracita: #626262;
+  --uaem-blanco: #FDFDFD;
+  --uaem-borde: #E5E7EB;
+}
+
+body {
+  background-color: var(--uaem-blanco);
+  color: var(--uaem-antracita);
+}
