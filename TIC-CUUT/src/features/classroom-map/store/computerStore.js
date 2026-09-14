@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { mockClassrooms } from './mockData';
+import { mockClassrooms } from '../mock/mockData';
 
 export const useComputerStore = create((set, get) => ({
   classrooms: [],

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useAuthStore } from '../../stores/authStore';
+import { useAuthStore } from '../../../store/authStore';
 import { toast } from 'react-hot-toast';
 
 export default function AdminUsersPage() {

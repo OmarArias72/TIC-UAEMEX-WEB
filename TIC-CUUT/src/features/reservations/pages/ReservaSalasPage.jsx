@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import SolicitudExtra from './SolicitudExtra';
+import SolicitudExtra from '../modals/SolicitudExtraModal';
 
 // Datos de prueba con el campo de profesor agregado
 const mockSalas = [

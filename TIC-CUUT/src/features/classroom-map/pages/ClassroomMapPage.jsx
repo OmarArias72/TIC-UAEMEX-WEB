@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { useComputerStore } from './computerStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Toaster, toast } from 'react-hot-toast';
 
-import ClassroomGrid from './ClassroomGrid';
-import ComputerGrid from './ComputerGrid';
-import StatusLegend from './StatusLegend';
-import ComputerFormModal from './ComputerFormModal';
-import RoomFormModal from './RoomFormModal';
+// Store
+import { useComputerStore } from '../store/computerStore';
+
+// Componentes
+import ClassroomGrid from '../components/ClassroomGrid';
+import ComputerGrid from '../components/ComputerGrid';
+import StatusLegend from '../components/StatusLegend';
+
+// Modales
+import ComputerFormModal from '../modals/ComputerFormModal';
+import RoomFormModal from '../modals/RoomFormModal';
 
 export default function ClassroomMap() {
   const { 
