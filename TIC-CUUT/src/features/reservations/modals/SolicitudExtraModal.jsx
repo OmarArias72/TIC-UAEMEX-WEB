@@ -16,29 +16,28 @@ export default function SolicitudExtra({ onClose, salasDisponibles = [], salaIni
   };
 
   return (
-    <div className="fixed inset-0 bg-slate-900/50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-xl shadow-xl max-w-md w-full overflow-hidden">
+    <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+      <div className="bg-white rounded-2xl shadow-xl max-w-md w-full overflow-hidden border border-slate-200">
         
-        <div className="bg-[#536855] px-6 py-4 flex justify-between items-center">
-          <h3 className="text-white font-bold text-lg">Solicitud Extraordinaria de Sala</h3>
-          <button onClick={onClose} className="text-white/80 hover:text-white font-bold">
+        <div className="bg-slate-900 px-6 py-4 flex justify-between items-center">
+          <h3 className="text-white font-extrabold text-base">Solicitud Extraordinaria de Sala</h3>
+          <button onClick={onClose} className="text-slate-400 hover:text-white font-bold transition-colors">
             ✕
           </button>
         </div>
 
         <div className="p-6">
-          <p className="text-sm text-slate-600 mb-5">
-            Usa este formulario si necesitas usar una sala en un horario que ya aparece marcado como ocupado. Esta petición será revisada manualmente.
+          <p className="text-xs text-slate-500 mb-5 leading-relaxed">
+            Usa este formulario si necesitas usar una sala en un horario ocupado. Esta petición será revisada por la administración.
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Selector dinámico de salas */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Seleccionar Sala Requerida</label>
+              <label className="block text-xs font-bold text-slate-700 uppercase mb-2">Sala Requerida</label>
               <select
                 value={solicitud.id_sala}
                 onChange={e => setSolicitud({...solicitud, id_sala: e.target.value})}
-                className="w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-slate-700 font-medium focus:ring-1 focus:ring-[#C89F5C] outline-none"
+                className="w-full px-3 py-2.5 bg-white border border-slate-300 rounded-xl text-slate-800 text-sm font-medium focus:ring-2 focus:ring-[#486AE6]/20 focus:border-[#486AE6] outline-none"
               >
                 {salasDisponibles.length > 0 ? (
                   salasDisponibles.map(sala => (
@@ -52,64 +51,63 @@ export default function SolicitudExtra({ onClose, salasDisponibles = [], salaIni
               </select>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase mb-2">Fecha</label>
+              <input
+                type="date"
+                required
+                value={solicitud.fecha}
+                onChange={e => setSolicitud({...solicitud, fecha: e.target.value})}
+                className="w-full px-3 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#486AE6]/20 focus:border-[#486AE6] outline-none text-sm"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Fecha</label>
+                <label className="block text-xs font-bold text-slate-700 uppercase mb-2">Hora Inicio</label>
                 <input
-                  type="date"
+                  type="time"
                   required
-                  value={solicitud.fecha}
-                  onChange={e => setSolicitud({...solicitud, fecha: e.target.value})}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-[#C89F5C] outline-none text-sm"
+                  value={solicitud.hora_inicio}
+                  onChange={e => setSolicitud({...solicitud, hora_inicio: e.target.value})}
+                  className="w-full px-3 py-2.5 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-[#486AE6]/20 focus:border-[#486AE6] outline-none"
                 />
               </div>
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">De</label>
-                  <input
-                    type="time"
-                    required
-                    value={solicitud.hora_inicio}
-                    onChange={e => setSolicitud({...solicitud, hora_inicio: e.target.value})}
-                    className="w-full px-2 py-2 border border-slate-300 rounded-md text-xs"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Hasta</label>
-                  <input
-                    type="time"
-                    required
-                    value={solicitud.hora_fin}
-                    onChange={e => setSolicitud({...solicitud, hora_fin: e.target.value})}
-                    className="w-full px-2 py-2 border border-slate-300 rounded-md text-xs"
-                  />
-                </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase mb-2">Hora Fin</label>
+                <input
+                  type="time"
+                  required
+                  value={solicitud.hora_fin}
+                  onChange={e => setSolicitud({...solicitud, hora_fin: e.target.value})}
+                  className="w-full px-3 py-2.5 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-[#486AE6]/20 focus:border-[#486AE6] outline-none"
+                />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Justificación del Empalme</label>
+              <label className="block text-xs font-bold text-slate-700 uppercase mb-2">Justificación</label>
               <textarea
                 required
                 rows="3"
-                placeholder="Explica por qué necesitas la sala en este horario específico..."
+                placeholder="Explica por qué necesitas la sala..."
                 value={solicitud.justificacion}
                 onChange={e => setSolicitud({...solicitud, justificacion: e.target.value})}
-                className="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-[#C89F5C] outline-none text-sm resize-none"
+                className="w-full px-3 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-[#486AE6]/20 focus:border-[#486AE6] outline-none text-sm resize-none"
               ></textarea>
             </div>
 
-            <div className="pt-4 flex gap-3 justify-end">
+            <div className="pt-4 flex gap-3 justify-end border-t border-slate-100">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-md font-medium text-sm transition-colors"
+                className="px-5 py-2.5 text-slate-600 hover:bg-slate-100 rounded-xl font-semibold text-sm transition-colors"
               >
                 Cancelar
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 bg-[#C89F5C] hover:bg-[#b08b4e] text-white rounded-md font-medium text-sm transition-colors"
+                className="px-5 py-2.5 bg-[#486AE6] hover:bg-[#3b59c7] text-white rounded-xl font-bold text-sm shadow-md transition-all"
               >
                 Enviar Solicitud
               </button>

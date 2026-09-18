@@ -14,7 +14,7 @@ import StatusLegend from '../components/StatusLegend';
 import ComputerFormModal from '../modals/ComputerFormModal';
 import RoomFormModal from '../modals/RoomFormModal';
 
-export default function ClassroomMap() {
+export default function ClassroomMapPage() {
   const { 
     classrooms, selectedClassroom, isLoading, fetchClassrooms, 
     selectClassroom, selectComputer, selectedComputer,
@@ -22,26 +22,21 @@ export default function ClassroomMap() {
     addClassroom, updateClassroom
   } = useComputerStore();
 
-  // Estados para Modal de Computadoras
   const [isCompModalOpen, setIsCompModalOpen] = useState(false);
   const [editingCompData, setEditingCompData] = useState(null);
 
-  // Estados para Modal de Salas
   const [isRoomModalOpen, setIsRoomModalOpen] = useState(false);
   const [editingRoomData, setEditingRoomData] = useState(null);
 
-  // Filtros de Salas
   const [roomSearchQuery, setRoomSearchQuery] = useState('');
-  const [roomSortType, setRoomSortType] = useState('nombre'); // 'nombre' | 'problemas'
+  const [roomSortType, setRoomSortType] = useState('nombre');
 
-  // Filtros de Computadoras
-  const [compFilterStatus, setCompFilterStatus] = useState('Todos'); // 'Todos' | 'Funcionando' | 'Problemas' | 'No funciona' | etc.
+  const [compFilterStatus, setCompFilterStatus] = useState('Todos');
 
   useEffect(() => {
     fetchClassrooms();
   }, [fetchClassrooms]);
 
-  // ---- Manejadores de Guardado ----
   const handleSaveComputer = (formData) => {
     if (editingCompData) {
       updateComputer(selectedClassroom.id, { ...formData, fecha_actualizacion: new Date().toISOString() });
@@ -78,14 +73,13 @@ export default function ClassroomMap() {
     }
   };
 
-  // ---- Lógica de Filtros y Ordenamiento ----
   const processedClassrooms = classrooms
     .filter(c => c.name.toLowerCase().includes(roomSearchQuery.toLowerCase()))
     .sort((a, b) => {
       if (roomSortType === 'problemas') {
         const probsA = a.computers.filter(comp => comp.status !== 'Funcionando').length;
         const probsB = b.computers.filter(comp => comp.status !== 'Funcionando').length;
-        return probsB - probsA; // Descendente: Los que tienen más problemas primero
+        return probsB - probsA;
       }
       return a.name.localeCompare(b.name);
     });
@@ -96,58 +90,48 @@ export default function ClassroomMap() {
     return c.status === compFilterStatus;
   });
 
-  if (isLoading) return <div className="min-h-screen flex items-center justify-center text-uaem-verde font-bold text-xl animate-pulse">Cargando infraestructura...</div>;
+  if (isLoading) return <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center text-[#486AE6] font-bold text-xl animate-pulse">Cargando infraestructura...</div>;
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
+    <div className="min-h-[calc(100vh-4rem)] bg-slate-50 p-6 md:p-8">
       <Toaster position="top-right" />
       <div className="max-w-7xl mx-auto">
         
-        {/* Cabecera Principal */}
         <header className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
           <div>
-            <h2 className="text-uaem-dorado font-semibold uppercase text-sm">Gestión de Infraestructura</h2>
-            <h1 className="text-3xl font-bold text-uaem-verde">
+            <span className="text-[#A65D8B] font-semibold uppercase text-xs tracking-wider">Gestión de Infraestructura</span>
+            <h1 className="text-3xl font-extrabold text-slate-900 mt-1">
               {selectedClassroom ? `Laboratorio: ${selectedClassroom.name}` : 'Seleccionar Aula'}
             </h1>
           </div>
           
-          {selectedClassroom ? (
-            <button 
-              onClick={() => { setEditingCompData(null); setIsCompModalOpen(true); }}
-              className="bg-uaem-dorado hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded shadow transition-colors"
-            >
-              + Registrar Equipo
-            </button>
-          ) : (
-            <button 
-              onClick={() => { setEditingRoomData(null); setIsRoomModalOpen(true); }}
-              className="bg-uaem-dorado hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded shadow transition-colors"
-            >
-              + Registrar Sala
-            </button>
-          )}
+          <button 
+            onClick={() => { 
+              if(selectedClassroom) { setEditingCompData(null); setIsCompModalOpen(true); } 
+              else { setEditingRoomData(null); setIsRoomModalOpen(true); } 
+            }}
+            className="bg-[#486AE6] hover:bg-[#3b59c7] text-white font-semibold py-2.5 px-5 rounded-xl shadow-md shadow-[#486AE6]/20 transition-all"
+          >
+            + Registrar {selectedClassroom ? 'Equipo' : 'Sala'}
+          </button>
         </header>
 
-        {/* VISTAS */}
         {!selectedClassroom ? (
-          /* ----- VISTA 1: LISTADO DE SALAS ----- */
           <div className="space-y-6">
-            {/* Barra de Filtros de Salas */}
-            <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex flex-col sm:flex-row gap-4 items-center justify-between">
+            <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col sm:flex-row gap-4 items-center justify-between">
               <input 
                 type="text" 
                 placeholder="🔍 Buscar sala por nombre..." 
                 value={roomSearchQuery}
                 onChange={(e) => setRoomSearchQuery(e.target.value)}
-                className="w-full sm:w-1/3 border border-gray-300 rounded p-2 text-sm focus:outline-none focus:border-uaem-verde"
+                className="w-full sm:w-1/3 border border-slate-300 rounded-xl p-2.5 text-sm focus:outline-none focus:border-[#486AE6] focus:ring-2 focus:ring-[#486AE6]/20 transition-all"
               />
-              <div className="flex items-center gap-2 w-full sm:w-auto">
-                <span className="text-sm text-gray-600 font-medium whitespace-nowrap">Ordenar por:</span>
+              <div className="flex items-center gap-3 w-full sm:w-auto">
+                <span className="text-sm text-slate-500 font-semibold whitespace-nowrap">Ordenar por:</span>
                 <select 
                   value={roomSortType} 
                   onChange={(e) => setRoomSortType(e.target.value)}
-                  className="w-full border border-gray-300 rounded p-2 text-sm bg-white focus:outline-none focus:border-uaem-verde"
+                  className="w-full border border-slate-300 rounded-xl p-2.5 text-sm bg-white focus:outline-none focus:border-[#486AE6] transition-all"
                 >
                   <option value="nombre">Alfabeto (Nombre)</option>
                   <option value="problemas">Mayores Problemas (Prioridad)</option>
@@ -162,26 +146,24 @@ export default function ClassroomMap() {
             />
           </div>
         ) : (
-          /* ----- VISTA 2: LISTADO DE COMPUTADORAS DE LA SALA ----- */
           <AnimatePresence mode="wait">
             <motion.div key={selectedClassroom.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
               
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-                <button onClick={() => selectClassroom(null)} className="flex items-center gap-2 text-uaem-antracita hover:text-uaem-verde font-medium">
+                <button onClick={() => selectClassroom(null)} className="flex items-center gap-2 text-slate-500 hover:text-[#486AE6] font-semibold transition-colors">
                   &larr; Volver al listado de aulas
                 </button>
 
-                {/* Filtro de Computadoras por estado */}
-                <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg border border-gray-200 shadow-sm">
-                  <span className="text-xs font-bold text-gray-500 uppercase">Filtro:</span>
+                <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-xl border border-slate-200 shadow-sm">
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Filtro:</span>
                   <select 
                     value={compFilterStatus} 
                     onChange={(e) => setCompFilterStatus(e.target.value)}
-                    className="text-sm bg-transparent border-none focus:ring-0 text-uaem-antracita font-medium cursor-pointer"
+                    className="text-sm bg-transparent border-none focus:ring-0 text-slate-700 font-semibold cursor-pointer outline-none"
                   >
                     <option value="Todos">Todos los equipos</option>
                     <option value="Funcionando">✅ Funcionando</option>
-                    <option value="Problemas">⚠️ Con Problemas (Revision/Daños)</option>
+                    <option value="Problemas">⚠️ Con Problemas (Revisión/Daños)</option>
                     <option value="Requiere revision">🟠 Solo Requiere revisión</option>
                     <option value="Requiere Mantenimiento">🔵 Solo Mantenimiento</option>
                     <option value="No funciona">🔴 Solo No funciona</option>
@@ -194,7 +176,7 @@ export default function ClassroomMap() {
                   {processedComputers.length > 0 ? (
                     <ComputerGrid computers={processedComputers} onSelectComputer={selectComputer} />
                   ) : (
-                    <div className="bg-white p-10 rounded-xl text-center text-gray-500 border border-dashed border-gray-300">
+                    <div className="bg-white py-12 rounded-2xl text-center text-slate-500 border-2 border-dashed border-slate-200">
                       No se encontraron equipos bajo este filtro.
                     </div>
                   )}
@@ -203,30 +185,29 @@ export default function ClassroomMap() {
                 <div className="lg:col-span-1 flex flex-col gap-4">
                   <StatusLegend />
                   
-                  {/* Panel Lateral del Equipo Seleccionado */}
                   {selectedComputer ? (
-                    <div className="bg-white p-5 rounded-xl shadow-sm border border-uaem-dorado">
+                    <div className="bg-white p-5 rounded-2xl shadow-lg shadow-[#486AE6]/5 border border-[#486AE6]/20">
                       <div className="flex justify-between items-center mb-4">
-                        <h3 className="font-bold text-uaem-verde truncate">{selectedComputer.inventario}</h3>
+                        <h3 className="font-extrabold text-slate-900 truncate">{selectedComputer.inventario}</h3>
                       </div>
-                      <div className="space-y-2 text-xs text-gray-700 mb-6">
-                        <p><span className="font-bold">Estado:</span> {selectedComputer.status}</p>
-                        <p><span className="font-bold">OS:</span> {selectedComputer.sistema_operativo}</p>
-                        <p><span className="font-bold">Hardware:</span> {selectedComputer.especificaciones_hardware}</p>
-                        <p><span className="font-bold">Teclado:</span> {selectedComputer.estado_teclado}</p>
-                        <p><span className="font-bold">Monitor:</span> {selectedComputer.estado_monitor}</p>
+                      <div className="space-y-2 text-sm text-slate-600 mb-6">
+                        <p><span className="font-semibold text-slate-800">Estado:</span> {selectedComputer.status}</p>
+                        <p><span className="font-semibold text-slate-800">OS:</span> {selectedComputer.sistema_operativo}</p>
+                        <p><span className="font-semibold text-slate-800">Hardware:</span> {selectedComputer.especificaciones_hardware}</p>
+                        <p><span className="font-semibold text-slate-800">Teclado:</span> {selectedComputer.estado_teclado}</p>
+                        <p><span className="font-semibold text-slate-800">Monitor:</span> {selectedComputer.estado_monitor}</p>
                       </div>
                       <div className="flex gap-2">
-                        <button onClick={() => { setEditingCompData(selectedComputer); setIsCompModalOpen(true); }} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded text-xs font-medium transition-colors">
+                        <button onClick={() => { setEditingCompData(selectedComputer); setIsCompModalOpen(true); }} className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-2.5 rounded-xl text-xs font-bold transition-colors">
                           Editar
                         </button>
-                        <button onClick={() => handleDeleteComputer(selectedComputer.id_equipo_computo)} className="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 rounded text-xs font-medium transition-colors">
+                        <button onClick={() => handleDeleteComputer(selectedComputer.id_equipo_computo)} className="flex-1 bg-red-50 hover:bg-red-100 text-red-600 py-2.5 rounded-xl text-xs font-bold transition-colors">
                           Borrar
                         </button>
                       </div>
                     </div>
                   ) : (
-                    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 text-center text-gray-500 text-sm">
+                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 text-center text-slate-500 text-sm">
                       Selecciona un equipo de la cuadrícula para ver sus detalles o gestionarlo.
                     </div>
                   )}
@@ -236,20 +217,8 @@ export default function ClassroomMap() {
           </AnimatePresence>
         )}
 
-        {/* Modales */}
-        <ComputerFormModal 
-          isOpen={isCompModalOpen} 
-          onClose={() => setIsCompModalOpen(false)} 
-          onSave={handleSaveComputer} 
-          initialData={editingCompData} 
-        />
-        
-        <RoomFormModal
-          isOpen={isRoomModalOpen}
-          onClose={() => setIsRoomModalOpen(false)}
-          onSave={handleSaveRoom}
-          initialData={editingRoomData}
-        />
+        <ComputerFormModal isOpen={isCompModalOpen} onClose={() => setIsCompModalOpen(false)} onSave={handleSaveComputer} initialData={editingCompData} />
+        <RoomFormModal isOpen={isRoomModalOpen} onClose={() => setIsRoomModalOpen(false)} onSave={handleSaveRoom} initialData={editingRoomData} />
       </div>
     </div>
   );

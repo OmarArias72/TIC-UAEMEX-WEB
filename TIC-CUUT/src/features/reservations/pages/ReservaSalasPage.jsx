@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import SolicitudExtra from '../modals/SolicitudExtraModal';
 
-// Datos de prueba con el campo de profesor agregado
 const mockSalas = [
   { id_sala: 1, codigo_sala: 'CC-01', nombre: 'Centro de Cómputo 1' },
   { id_sala: 2, codigo_sala: 'CC-02', nombre: 'Laboratorio Redes' },
@@ -30,8 +29,7 @@ export default function ReservaSalas() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 p-6 flex flex-col md:flex-row gap-6">
-      {/* Modal de Solicitud Extra */}
+    <div className="min-h-[calc(100vh-4rem)] bg-slate-50 p-6 md:p-8 flex flex-col md:flex-row gap-6">
       {mostrarSolicitudModal && (
         <SolicitudExtra 
           onClose={() => setMostrarSolicitudModal(false)} 
@@ -41,21 +39,24 @@ export default function ReservaSalas() {
       )}
 
       {/* Sidebar - Listado de Salas */}
-      <div className="w-full md:w-1/4 bg-white rounded-xl shadow-sm border border-slate-200 p-4 h-fit">
-        <h3 className="font-bold text-[#536855] mb-4 border-b pb-2">Salas Disponibles</h3>
+      <div className="w-full md:w-1/4 bg-white rounded-2xl shadow-sm border border-slate-200/80 p-5 h-fit space-y-4">
+        <div>
+          <span className="text-[#A65D8B] font-semibold text-xs uppercase tracking-wider">Infraestructura</span>
+          <h3 className="font-extrabold text-slate-900 text-lg mt-1">Salas Disponibles</h3>
+        </div>
         <div className="space-y-2">
           {mockSalas.map(sala => (
             <button
               key={sala.id_sala}
               onClick={() => setSalaSeleccionada(sala)}
-              className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
+              className={`w-full text-left px-4 py-3 rounded-xl transition-all ${
                 salaSeleccionada.id_sala === sala.id_sala 
-                ? 'bg-[#536855] text-white' 
+                ? 'bg-slate-900 text-white shadow-md' 
                 : 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200'
               }`}
             >
-              <span className="block font-semibold text-sm">{sala.codigo_sala}</span>
-              <span className="block text-xs opacity-80">{sala.nombre}</span>
+              <span className="block font-bold text-xs uppercase tracking-wider opacity-90">{sala.codigo_sala}</span>
+              <span className="block font-semibold text-sm mt-0.5">{sala.nombre}</span>
             </button>
           ))}
         </div>
@@ -63,40 +64,43 @@ export default function ReservaSalas() {
 
       {/* Main Content */}
       <div className="flex-1 space-y-6">
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-bold text-slate-800">
-              Disponibilidad: {salaSeleccionada.nombre}
-            </h2>
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-6 md:p-8">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 pb-6 border-b border-slate-100">
+            <div>
+              <span className="text-[#486AE6] font-semibold text-xs uppercase tracking-wider">Disponibilidad de Agenda</span>
+              <h2 className="text-2xl font-extrabold text-slate-900 mt-1">
+                {salaSeleccionada.nombre}
+              </h2>
+            </div>
             <input
               type="date"
               value={fecha}
               onChange={(e) => setFecha(e.target.value)}
-              className="border border-slate-300 rounded-md px-3 py-2 text-sm focus:ring-[#C89F5C] focus:border-[#C89F5C] outline-none"
+              className="border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-[#486AE6]/20 focus:border-[#486AE6] outline-none"
             />
           </div>
 
-          {/* Tabla de horarios ocupados con Profesor */}
-          <div className="overflow-hidden border border-slate-200 rounded-lg mb-8">
+          {/* Tabla de horarios ocupados */}
+          <div className="overflow-hidden border border-slate-200 rounded-2xl mb-8 shadow-sm">
             <table className="min-w-full divide-y divide-slate-200 text-sm">
-              <thead className="bg-[#536855] text-white">
+              <thead className="bg-slate-900 text-white text-xs uppercase tracking-wider">
                 <tr>
-                  <th className="px-6 py-3 text-left font-medium">Horario Ocupado</th>
-                  <th className="px-6 py-3 text-left font-medium">Profesor / Responsable</th>
-                  <th className="px-6 py-3 text-left font-medium">Propósito</th>
-                  <th className="px-6 py-3 text-left font-medium">Estado</th>
+                  <th className="px-6 py-4 font-semibold">Horario Ocupado</th>
+                  <th className="px-6 py-4 font-semibold">Profesor / Responsable</th>
+                  <th className="px-6 py-4 font-semibold">Propósito</th>
+                  <th className="px-6 py-4 font-semibold">Estado</th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-slate-200">
+              <tbody className="bg-white divide-y divide-slate-100">
                 {mockReservas.map(reserva => (
-                  <tr key={reserva.id_uso}>
-                    <td className="px-6 py-4 font-medium text-slate-800">
+                  <tr key={reserva.id_uso} className="hover:bg-slate-50 transition-colors">
+                    <td className="px-6 py-4 font-bold text-slate-900">
                       {reserva.fecha_inicio} - {reserva.fecha_fin}
                     </td>
                     <td className="px-6 py-4 text-slate-700 font-medium">{reserva.profesor}</td>
                     <td className="px-6 py-4 text-slate-600">{reserva.proposito}</td>
                     <td className="px-6 py-4">
-                      <span className="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs font-medium">Reservado</span>
+                      <span className="px-3 py-1 bg-red-50 text-red-600 border border-red-100 rounded-full text-xs font-semibold">Reservado</span>
                     </td>
                   </tr>
                 ))}
@@ -105,66 +109,66 @@ export default function ReservaSalas() {
           </div>
 
           {/* Formulario de Uso_Salas */}
-          <div className="bg-slate-50 p-5 rounded-lg border border-slate-200">
-            <h3 className="font-bold text-[#536855] mb-4">Registrar Nuevo Uso de Sala</h3>
+          <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200">
+            <h3 className="font-extrabold text-slate-900 text-base mb-4">Registrar Nuevo Uso de Sala</h3>
             <form onSubmit={handleReserva} className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="md:col-span-2">
-                <label className="block text-xs font-medium text-slate-700 mb-1">Nombre del Profesor / Docente</label>
+                <label className="block text-xs font-bold text-slate-700 uppercase mb-2">Nombre del Profesor / Docente</label>
                 <input
                   type="text"
                   required
                   placeholder="Ej. Dr. Carlos Hernández"
                   value={formularioReserva.profesor}
                   onChange={e => setFormularioReserva({...formularioReserva, profesor: e.target.value})}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm"
+                  className="w-full px-3 py-2.5 border border-slate-300 rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#486AE6]/20 focus:border-[#486AE6] outline-none"
                 />
               </div>
 
               <div className="md:col-span-1">
-                <label className="block text-xs font-medium text-slate-700 mb-1">Hora Inicio</label>
+                <label className="block text-xs font-bold text-slate-700 uppercase mb-2">Hora Inicio</label>
                 <input
                   type="time"
                   required
                   value={formularioReserva.hora_inicio}
                   onChange={e => setFormularioReserva({...formularioReserva, hora_inicio: e.target.value})}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm"
+                  className="w-full px-3 py-2.5 border border-slate-300 rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#486AE6]/20 focus:border-[#486AE6] outline-none"
                 />
               </div>
 
               <div className="md:col-span-1">
-                <label className="block text-xs font-medium text-slate-700 mb-1">Hora Fin</label>
+                <label className="block text-xs font-bold text-slate-700 uppercase mb-2">Hora Fin</label>
                 <input
                   type="time"
                   required
                   value={formularioReserva.hora_fin}
                   onChange={e => setFormularioReserva({...formularioReserva, hora_fin: e.target.value})}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm"
+                  className="w-full px-3 py-2.5 border border-slate-300 rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#486AE6]/20 focus:border-[#486AE6] outline-none"
                 />
               </div>
 
               <div className="md:col-span-4">
-                <label className="block text-xs font-medium text-slate-700 mb-1">Propósito / Actividad</label>
+                <label className="block text-xs font-bold text-slate-700 uppercase mb-2">Propósito / Actividad</label>
                 <input
                   type="text"
                   required
                   placeholder="Ej. Práctica de base de datos"
                   value={formularioReserva.proposito}
                   onChange={e => setFormularioReserva({...formularioReserva, proposito: e.target.value})}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm"
+                  className="w-full px-3 py-2.5 border border-slate-300 rounded-xl text-sm bg-white focus:ring-2 focus:ring-[#486AE6]/20 focus:border-[#486AE6] outline-none"
                 />
               </div>
 
-              <div className="md:col-span-4 flex justify-between items-center mt-2">
+              <div className="md:col-span-4 flex flex-col sm:flex-row justify-between items-center gap-4 mt-4 pt-4 border-t border-slate-200">
                 <button
                   type="button"
                   onClick={() => setMostrarSolicitudModal(true)}
-                  className="text-sm text-[#C89F5C] font-medium hover:underline"
+                  className="text-sm text-[#486AE6] font-semibold hover:underline"
                 >
                   ¿El horario que buscas está ocupado? Solicitar excepción al Admin
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 bg-[#C89F5C] hover:bg-[#b08b4e] text-white font-medium rounded-md transition-colors"
+                  className="w-full sm:w-auto px-6 py-3 bg-[#486AE6] hover:bg-[#3b59c7] text-white font-bold rounded-xl shadow-lg shadow-[#486AE6]/25 transition-all text-sm"
                 >
                   Confirmar Reserva
                 </button>

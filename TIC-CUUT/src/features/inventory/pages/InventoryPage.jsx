@@ -10,82 +10,77 @@ export default function InventoryPage() {
   const [endDate, setEndDate] = useState('');
 
   return (
-    <div className="min-h-screen bg-uaem-blanco p-8">
+    <div className="min-h-screen bg-slate-50 p-6 md:p-8">
       <div className="max-w-7xl mx-auto mb-8 flex justify-between items-end">
         <div>
-          <h2 className="text-uaem-dorado font-semibold uppercase text-sm mb-1">Universidad Autónoma del Estado de México</h2>
-          <h1 className="text-3xl font-bold text-uaem-verde">Listado de Inventario</h1>
+          <span className="text-[#A65D8B] font-semibold uppercase text-xs tracking-wider">Universidad Autónoma del Estado de México</span>
+          <h1 className="text-3xl font-extrabold text-slate-900">Listado de Inventario</h1>
         </div>
-        <a href="/" className="text-uaem-antracita hover:text-uaem-verde transition-colors font-medium">
+        <a href="/" className="text-slate-500 hover:text-[#486AE6] transition-colors font-semibold text-sm">
           &larr; Volver al inicio
         </a>
       </div>
 
-      {/* Panel de Controles: Fechas y Exportación */}
-      <div className="max-w-7xl mx-auto mb-6 bg-white p-4 rounded-xl shadow-sm border border-uaem-borde flex flex-col md:flex-row justify-between items-center gap-4">
-        
-        {/* Selector de Fechas */}
+      {/* Controles */}
+      <div className="max-w-7xl mx-auto mb-6 bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
         <div className="flex items-center gap-3 w-full md:w-auto">
           <div className="flex flex-col">
-            <label className="text-xs text-uaem-antracita font-medium mb-1">Desde</label>
+            <label className="text-xs text-slate-500 font-semibold mb-1">Desde</label>
             <input 
               type="date" 
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-uaem-verde focus:ring-1 focus:ring-uaem-verde"
+              className="border border-slate-300 rounded-xl px-3 py-1.5 text-sm outline-none focus:border-[#486AE6] focus:ring-1 focus:ring-[#486AE6]"
             />
           </div>
           <div className="flex flex-col">
-            <label className="text-xs text-uaem-antracita font-medium mb-1">Hasta</label>
+            <label className="text-xs text-slate-500 font-semibold mb-1">Hasta</label>
             <input 
               type="date" 
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-uaem-verde focus:ring-1 focus:ring-uaem-verde"
+              className="border border-slate-300 rounded-xl px-3 py-1.5 text-sm outline-none focus:border-[#486AE6] focus:ring-1 focus:ring-[#486AE6]"
             />
           </div>
         </div>
 
-        {/* Botones de Exportación */}
         <div className="flex gap-3 w-full md:w-auto">
-          <button className="flex-1 md:flex-none bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-md shadow transition-colors flex items-center justify-center gap-2 text-sm">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+          <button className="flex-1 md:flex-none bg-slate-900 hover:bg-slate-800 text-white font-semibold py-2 px-4 rounded-xl shadow-sm transition-all flex items-center justify-center gap-2 text-sm">
             PDF
           </button>
-          <button className="flex-1 md:flex-none bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-md shadow transition-colors flex items-center justify-center gap-2 text-sm">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+          <button className="flex-1 md:flex-none bg-[#486AE6] hover:bg-[#3b59c7] text-white font-semibold py-2 px-4 rounded-xl shadow-md shadow-[#486AE6]/20 transition-all flex items-center justify-center gap-2 text-sm">
             Excel
           </button>
         </div>
       </div>
 
-      {/* Tabla de Inventario */}
-      <div className="max-w-7xl mx-auto bg-white rounded-xl shadow-sm border border-uaem-borde overflow-hidden">
+      {/* Tabla */}
+      <div className="max-w-7xl mx-auto bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-uaem-verde text-white text-sm uppercase tracking-wide">
-                <th className="py-4 px-6 font-medium">No. Inventario</th>
-                <th className="py-4 px-6 font-medium">No. Serie</th>
-                <th className="py-4 px-6 font-medium">Artículo</th>
-                <th className="py-4 px-6 font-medium">Marca / Modelo</th>
-                <th className="py-4 px-6 font-medium">Ubicación</th>
-                <th className="py-4 px-6 font-medium">Estado</th>
+              <tr className="bg-slate-900 text-white text-xs uppercase tracking-wider">
+                <th className="py-4 px-6 font-semibold">No. Inventario</th>
+                <th className="py-4 px-6 font-semibold">No. Serie</th>
+                <th className="py-4 px-6 font-semibold">Artículo</th>
+                <th className="py-4 px-6 font-semibold">Marca / Modelo</th>
+                <th className="py-4 px-6 font-semibold">Ubicación</th>
+                <th className="py-4 px-6 font-semibold">Estado</th>
               </tr>
             </thead>
-            <tbody className="text-uaem-antracita text-sm">
-              {mockInventory.map((item, index) => (
-                <tr key={item.noInventario} className={`border-b border-uaem-borde hover:bg-gray-50 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
-                  <td className="py-4 px-6 font-medium text-uaem-verde">{item.noInventario}</td>
-                  <td className="py-4 px-6">{item.noSerie}</td>
-                  <td className="py-4 px-6 font-medium">{item.articulo}</td>
+            <tbody className="text-slate-700 text-sm divide-y divide-slate-100">
+              {mockInventory.map((item) => (
+                <tr key={item.noInventario} className="hover:bg-slate-50 transition-colors">
+                  <td className="py-4 px-6 font-semibold text-[#486AE6]">{item.noInventario}</td>
+                  <td className="py-4 px-6 font-mono text-xs text-slate-500">{item.noSerie}</td>
+                  <td className="py-4 px-6 font-semibold text-slate-900">{item.articulo}</td>
                   <td className="py-4 px-6">
-                    <span className="block">{item.marca}</span>
-                    <span className="text-xs text-gray-500">{item.modelo}</span>
+                    <span className="block font-medium">{item.marca}</span>
+                    <span className="text-xs text-slate-400">{item.modelo}</span>
                   </td>
                   <td className="py-4 px-6">{item.ubicacion}</td>
                   <td className="py-4 px-6">
-                    <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-uaem-verde-ligero text-uaem-verde">
+                    <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-[#7AD349]/20 text-slate-800">
                       {item.estado}
                     </span>
                   </td>

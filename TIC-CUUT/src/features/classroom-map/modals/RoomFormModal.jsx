@@ -15,30 +15,41 @@ export default function RoomFormModal({ isOpen, onClose, onSave, initialData }) 
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4">
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-sm">
-        <div className="p-4 border-b border-gray-200 flex justify-between items-center">
-          <h2 className="text-lg font-bold text-uaem-verde">
+    <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex justify-center items-center z-50 p-4">
+      <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm border border-slate-200">
+        <div className="p-5 border-b border-slate-100 flex justify-between items-center">
+          <h2 className="text-lg font-extrabold text-slate-900">
             {initialData ? 'Editar Nombre de Sala' : 'Registrar Nueva Sala'}
           </h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-red-500">&times;</button>
+          <button onClick={onClose} className="text-slate-400 hover:text-red-500 font-bold transition-colors">✕</button>
         </div>
         
-        <form onSubmit={handleSubmit} className="p-4 space-y-4">
+        <form onSubmit={handleSubmit} className="p-5 space-y-5">
           <div>
-            <label className="block text-xs font-bold text-gray-700 mb-1">Nombre / Identificador de la Sala *</label>
+            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Nombre / Identificador *</label>
             <input 
               required 
               type="text" 
               value={name} 
               onChange={(e) => setName(e.target.value)} 
               placeholder="Ej. L1, A2, C6"
-              className="w-full border border-gray-300 rounded p-2 text-sm focus:outline-none focus:border-uaem-verde focus:ring-1 focus:ring-uaem-verde" 
+              className="w-full border border-slate-300 rounded-xl p-3 text-sm outline-none focus:border-[#486AE6] focus:ring-2 focus:ring-[#486AE6]/20 transition-all" 
             />
           </div>
-          <div className="mt-4 flex justify-end gap-3">
-            <button type="button" onClick={onClose} className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded hover:bg-gray-200">Cancelar</button>
-            <button type="submit" className="px-4 py-2 text-sm font-medium text-white bg-uaem-verde rounded hover:bg-green-800">Guardar</button>
+          <div className="flex justify-end gap-3 pt-3">
+            <button 
+              type="button" 
+              onClick={onClose} 
+              className="px-5 py-2.5 text-sm font-bold text-slate-600 bg-slate-100 rounded-xl hover:bg-slate-200 transition-colors"
+            >
+              Cancelar
+            </button>
+            <button 
+              type="submit" 
+              className="px-5 py-2.5 text-sm font-bold text-white bg-[#486AE6] rounded-xl shadow-md hover:bg-[#3b59c7] transition-all"
+            >
+              Guardar
+            </button>
           </div>
         </form>
       </div>

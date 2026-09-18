@@ -14,61 +14,63 @@ export default function LoginPage() {
     const success = login(email, password);
     if (success) {
       toast.success('Bienvenido al sistema');
-      navigate('/aulas'); // Redirige al dashboard tras loguearse
+      navigate('/aulas');
     } else {
       toast.error('Credenciales incorrectas');
     }
   };
 
   return (
-    <div className="min-h-screen bg-uaem-blanco flex items-center justify-center relative overflow-hidden">
-      {/* Decoración de fondo */}
-      <div className="absolute top-[-10%] left-[-10%] w-96 h-96 rounded-full border-[12px] border-uaem-dorado opacity-20"></div>
-      
-      <div className="bg-white p-8 rounded-xl shadow-xl border border-gray-200 w-full max-w-md z-10">
+    <div className="min-h-[calc(100vh-4rem)] bg-slate-50 flex items-center justify-center relative overflow-hidden p-4">
+      {/* Elementos geométricos decorativos */}
+      <div className="absolute top-[-10%] left-[-10%] w-96 h-96 rounded-full border-[2px] border-[#486AE6]/30 bg-[#486AE6]/5 blur-sm pointer-events-none"></div>
+      <div className="absolute bottom-[-10%] right-[-10%] w-80 h-80 rounded-full border-[2px] border-[#7AD349]/30 bg-[#7AD349]/5 blur-sm pointer-events-none"></div>
+
+      <div className="bg-white p-8 rounded-2xl shadow-xl border border-slate-200/80 w-full max-w-md z-10">
         <div className="text-center mb-8">
-          <h2 className="text-uaem-dorado font-bold uppercase text-sm tracking-widest mb-2">UAEMéx</h2>
-          <h1 className="text-3xl font-bold text-uaem-verde">Inicio de Sesión</h1>
+          <span className="inline-block px-3 py-1 rounded-full bg-[#486AE6]/10 text-[#486AE6] font-semibold text-xs uppercase tracking-wider mb-3">
+            UAEMéx - Control TIC
+          </span>
+          <h1 className="text-3xl font-extrabold text-slate-900">Inicio de Sesión</h1>
         </div>
 
-        <form onSubmit={handleLogin} className="space-y-6">
+        <form onSubmit={handleLogin} className="space-y-5">
           <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2">Correo Electrónico</label>
+            <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">Correo Electrónico</label>
             <input 
               type="email" 
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:border-uaem-verde focus:ring-1 focus:ring-uaem-verde"
+              className="w-full border border-slate-300 rounded-xl p-3 text-slate-800 text-sm focus:outline-none focus:border-[#486AE6] focus:ring-2 focus:ring-[#486AE6]/20 transition-all"
               placeholder="usuario@uaemex.mx"
             />
           </div>
           
           <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2">Contraseña</label>
+            <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">Contraseña</label>
             <input 
               type="password" 
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:border-uaem-verde focus:ring-1 focus:ring-uaem-verde"
+              className="w-full border border-slate-300 rounded-xl p-3 text-slate-800 text-sm focus:outline-none focus:border-[#486AE6] focus:ring-2 focus:ring-[#486AE6]/20 transition-all"
               placeholder="••••••••"
             />
           </div>
 
           <button 
             type="submit" 
-            className="w-full bg-uaem-verde hover:bg-green-800 text-white font-bold py-3 rounded-lg shadow-md transition-colors"
+            className="w-full bg-[#486AE6] hover:bg-[#3b59c7] text-white font-semibold py-3.5 rounded-xl shadow-lg shadow-[#486AE6]/25 transition-all text-sm"
           >
             Ingresar al Sistema
           </button>
         </form>
 
-        {/* Nuevo enlace para registro */}
-        <div className="mt-6 text-center border-t border-gray-100 pt-4">
-          <p className="text-sm text-gray-600">
+        <div className="mt-6 text-center border-t border-slate-100 pt-5">
+          <p className="text-sm text-slate-500">
             ¿No tienes cuenta?{' '}
-            <Link to="/registro" className="text-uaem-dorado font-bold hover:text-yellow-600 transition-colors">
+            <Link to="/registro" className="text-[#486AE6] font-semibold hover:text-[#A65D8B] transition-colors">
               Regístrate aquí
             </Link>
           </p>
