@@ -1,5 +1,19 @@
 import React from 'react';
 
+const STATUS_BADGE = {
+  'Funcionando': 'bg-green-500 text-white',
+  'Requiere revisión': 'bg-orange-500 text-white',
+  'Requiere Mantenimiento': 'bg-[#486AE6] text-white',
+  'No funciona': 'bg-red-500 text-white',
+};
+
+const STATUS_BORDER = {
+  'Funcionando': 'border-green-200 shadow-green-100/40',
+  'Requiere revisión': 'border-orange-200 shadow-orange-100/40',
+  'Requiere Mantenimiento': 'border-[#486AE6]/30 shadow-blue-100/40',
+  'No funciona': 'border-red-200 shadow-red-100/40',
+};
+
 export default function ComputerDetails({ computer, onEdit, onDelete }) {
   if (!computer) {
     return (
@@ -9,29 +23,50 @@ export default function ComputerDetails({ computer, onEdit, onDelete }) {
     );
   }
 
-  const statusColors = {
-    'Funcionando': 'bg-[#7AD349] text-slate-900',
-    'No funciona': 'bg-red-500 text-white',
-    'Requiere revision': 'bg-yellow-500 text-slate-900',
-    'Requiere Mantenimiento': 'bg-[#486AE6] text-white'
-  };
+  // Fallbacks para estado_cpu
+  const statusKey = (() => {
+    if (STATUS_BADGE[computer.status]) return computer.status;
+    if (['Con fallas', 'En revisión', 'Requiere mantenimiento'].includes(computer.status)) {
+      return 'Requiere revisión';
+    }
+    if (computer.status === 'Funciona') return 'Funcionando';
+    return 'Funcionando';
+  })();
+
+  const badgeCls = STATUS_BADGE[statusKey];
+  const borderCls = STATUS_BORDER[statusKey];
 
   return (
-    <div className="bg-white p-6 rounded-2xl shadow-lg shadow-[#486AE6]/5 border border-[#486AE6]/20">
+    <div className={`bg-white p-6 rounded-2xl shadow-lg border ${borderCls}`}>
       <div className="flex justify-between items-start mb-5">
         <div>
-          <h3 className="text-lg font-extrabold text-slate-900">Ubicación: {computer.name}</h3>
-          <p className="text-xs text-slate-500 font-mono mt-1">ID: {computer.inventario}</p>
+          <h3 className="text-lg font-extrabold text-slate-900">
+            Ubicación: {computer.name}
+          </h3>
+          <p className="text-xs text-slate-500 font-mono mt-1">
+            ID: {computer.inventario}
+          </p>
         </div>
-        <span className={`px-2.5 py-1 text-[10px] uppercase tracking-wider font-bold rounded-lg shadow-sm ${statusColors[computer.status] || 'bg-slate-500 text-white'}`}>
+        <span
+          className={`px-2.5 py-1 text-[10px] uppercase tracking-wider font-bold rounded-lg shadow-sm ${badgeCls}`}
+        >
           {computer.status}
         </span>
       </div>
-      
+
       <div className="space-y-3 text-sm text-slate-700 mb-6 bg-slate-50 p-4 rounded-xl border border-slate-100">
-        <p><strong className="text-slate-900">Hardware:</strong> {computer.especificaciones_hardware}</p>
-        <p><strong className="text-slate-900">OS:</strong> {computer.sistema_operativo}</p>
-        <p><strong className="text-slate-900">Software:</strong> {computer.software_instalado}</p>
+        <p>
+          <strong className="text-slate-900">Hardware:</strong>{' '}
+          {computer.especificaciones_hardware}
+        </p>
+        <p>
+          <strong className="text-slate-900">OS:</strong>{' '}
+          {computer.sistema_operativo}
+        </p>
+        <p>
+          <strong className="text-slate-900">Software:</strong>{' '}
+          {computer.software_instalado}
+        </p>
         <div className="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-slate-200 text-xs font-medium">
           <p className="flex items-center gap-1">⌨️ {computer.estado_teclado}</p>
           <p className="flex items-center gap-1">🖱️ {computer.estado_mouse}</p>
@@ -41,17 +76,17 @@ export default function ComputerDetails({ computer, onEdit, onDelete }) {
       </div>
 
       <div className="flex gap-3">
-        <button 
+        <button
           onClick={() => onEdit(computer)}
           className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-2.5 rounded-xl text-sm font-bold transition-colors flex items-center justify-center gap-2"
         >
           Actualizar
         </button>
-        <button 
+        <button
           onClick={() => onDelete(computer.id_equipo_computo)}
           className="flex-1 bg-red-50 hover:bg-red-100 text-red-600 py-2.5 rounded-xl text-sm font-bold transition-colors flex items-center justify-center gap-2"
         >
-          🗑️ Borrar
+          Borrar
         </button>
       </div>
     </div>

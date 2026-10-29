@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import useAuthStore, { ROLES } from '../../store/authStore';
+import { useAuthStore } from '../../store/authStore';
 
 export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,6 +12,32 @@ export default function NavBar() {
     setIsOpen(false);
     navigate('/login');
   };
+
+  // Normalización del nombre del rol procedente de Spring Boot (UsuarioResponseDTO)
+  const userRole = (user?.nombreRol || user?.role || '').toLowerCase();
+  const userName = user?.nombre ? `${user.nombre} ${user.apellidos || ''}` : user?.name || 'Usuario';
+
+  // ============================================================
+  // DEFINICIÓN DE ENLACES Y PERMISOS POR ROL
+  // ============================================================
+  const NAV_ITEMS = [
+    { label: 'Inicio', to: '/', roles: ['admin', 'operador-tics', 'profesor', 'estudiante'] },
+    { label: 'Mapa de Aulas', to: '/aulas', roles: ['admin', 'operador-tics', 'profesor', 'estudiante'] },
+    { label: 'Inventario Total', to: '/inventario', roles: ['admin', 'operador-tics'] },
+    { label: 'Reserva de Salas', to: '/reservas', roles: ['admin', 'profesor', 'estudiante'] },
+    { label: 'Mesa de Ayuda', to: '/solicitudes-tecnicas', roles: ['admin', 'operador-tics', 'profesor', 'estudiante'] },
+  ];
+
+  const ADMIN_ITEMS = [
+    { label: 'Gestión de Usuarios', to: '/admin/usuarios', roles: ['admin'] },
+    { label: 'Control de Reservas', to: '/admin/reservas', roles: ['admin', 'operador-tics'] },
+    { label: 'Apertura / Cierre Agenda', to: '/admin/config-agenda', roles: ['admin', 'operador-tics'] },
+    { label: 'Panel Mesa de Ayuda', to: '/admin/solicitudes-tecnicas', roles: ['admin', 'operador-tics'] },
+  ];
+
+  // Filtrar los enlaces según el rol del usuario
+  const visibleNavItems = NAV_ITEMS.filter(item => item.roles.includes(userRole));
+  const visibleAdminItems = ADMIN_ITEMS.filter(item => item.roles.includes(userRole));
 
   return (
     <>
@@ -89,74 +115,43 @@ export default function NavBar() {
             {/* Indicador de Usuario Activo */}
             <div className="p-4 bg-slate-50 border-b border-slate-200/80">
               <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Usuario Activo</span>
-              <p className="font-bold text-slate-800 text-sm truncate">{user?.name}</p>
+              <p className="font-bold text-slate-800 text-sm truncate">{userName}</p>
               <span className="inline-block mt-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-[#486AE6]/10 text-[#486AE6] uppercase border border-[#486AE6]/20">
-                {user?.role}
+                {userRole}
               </span>
             </div>
 
             {/* Enlaces de Navegación del Sistema */}
             <div className="flex-1 overflow-y-auto py-2 divide-y divide-slate-100 text-sm font-semibold text-slate-700">
               <div className="py-2">
-                <Link 
-                  to="/" 
-                  onClick={() => setIsOpen(false)} 
-                  className="block px-6 py-3 hover:bg-slate-50 hover:text-[#486AE6] transition-colors"
-                >
-                  Inicio
-                </Link>
-                <Link 
-                  to="/aulas" 
-                  onClick={() => setIsOpen(false)} 
-                  className="block px-6 py-3 hover:bg-slate-50 hover:text-[#486AE6] transition-colors"
-                >
-                  Mapa de Aulas
-                </Link>
-                <Link 
-                  to="/inventario" 
-                  onClick={() => setIsOpen(false)} 
-                  className="block px-6 py-3 hover:bg-slate-50 hover:text-[#486AE6] transition-colors"
-                >
-                  Inventario Total
-                </Link>
-                <Link 
-                  to="/reservas" 
-                  onClick={() => setIsOpen(false)} 
-                  className="block px-6 py-3 hover:bg-slate-50 hover:text-[#486AE6] transition-colors"
-                >
-                  Reserva de Salas
-                </Link>
+                {visibleNavItems.map((item) => (
+                  <Link 
+                    key={item.to}
+                    to={item.to} 
+                    onClick={() => setIsOpen(false)} 
+                    className="block px-6 py-3 hover:bg-slate-50 hover:text-[#486AE6] transition-colors"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
               </div>
 
-              {/* Opciones Especiales para ADMIN y PERSONAL_TIC */}
-              {(user?.role === ROLES.ADMIN || user?.role === ROLES.PERSONAL_TIC) && (
+              {/* Opciones Especiales para Admin y Operador-tics */}
+              {visibleAdminItems.length > 0 && (
                 <div className="py-2 bg-slate-50/50">
                   <span className="block px-6 py-1 text-[10px] font-bold uppercase tracking-wider text-[#A65D8B]">
                     Administración TIC
                   </span>
-                  {user?.role === ROLES.ADMIN && (
+                  {visibleAdminItems.map((item) => (
                     <Link 
-                      to="/admin/usuarios" 
+                      key={item.to}
+                      to={item.to} 
                       onClick={() => setIsOpen(false)} 
                       className="block px-6 py-2.5 hover:bg-slate-100 hover:text-[#486AE6] transition-colors text-xs"
                     >
-                      Gestión de Usuarios
+                      {item.label}
                     </Link>
-                  )}
-                  <Link 
-                    to="/admin/reservas" 
-                    onClick={() => setIsOpen(false)} 
-                    className="block px-6 py-2.5 hover:bg-slate-100 hover:text-[#486AE6] transition-colors text-xs"
-                  >
-                    Control de Reservas
-                  </Link>
-                  <Link 
-                    to="/admin/config-agenda" 
-                    onClick={() => setIsOpen(false)} 
-                    className="block px-6 py-2.5 hover:bg-slate-100 hover:text-[#486AE6] transition-colors text-xs"
-                  >
-                    Apertura / Cierre Agenda
-                  </Link>
+                  ))}
                 </div>
               )}
             </div>

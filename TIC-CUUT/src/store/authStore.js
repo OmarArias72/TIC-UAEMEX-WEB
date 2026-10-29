@@ -1,47 +1,46 @@
 import { create } from 'zustand';
+import api from '../api/axios';
 
-// Constantes de Roles centralizadas
-export const ROLES = {
-  ADMIN: 'admin',
-  USER: 'user',
-  PERSONAL_TIC: 'personal_tic'
+// Función segura para extraer y parsear el usuario
+const getStoredUser = () => {
+  try {
+    const item = localStorage.getItem('user');
+    // Si no hay item o es el string literal "undefined", retornamos null
+    if (!item || item === 'undefined') return null;
+    return JSON.parse(item);
+  } catch (error) {
+    console.error("Error al parsear el usuario del localStorage:", error);
+    return null;
+  }
 };
 
-// Usuarios simulados iniciales
-const mockUsers = [
-  { id: 1, name: 'Administrador Principal', email: 'admin@uaemex.mx', password: 'admin', role: ROLES.ADMIN },
-  { id: 2, name: 'Operador Laboratorio', email: 'operador@uaemex.mx', password: '123', role: ROLES.USER },
-  { id: 3, name: 'Técnico de Soporte TIC', email: 'tic@uaemex.mx', password: '123', role: ROLES.PERSONAL_TIC }
-];
+export const useAuthStore = create((set) => ({
+  user: getStoredUser(),
+  isAuthenticated: !!getStoredUser(),
+  isLoading: false,
 
-export const useAuthStore = create((set, get) => ({
-  user: null, // null = no autenticado
-  isAuthenticated: false,
-  usersList: mockUsers,
+  login: async (email, password) => {
+    set({ isLoading: true });
+    try {
+      const response = await api.post('/usuarios/login', { email, password });
+      const userData = response.data;
 
-  login: (email, password) => {
-    const foundUser = get().usersList.find(u => u.email === email && u.password === password);
-    if (foundUser) {
-      set({ user: foundUser, isAuthenticated: true });
-      return true;
+      localStorage.setItem('user', JSON.stringify(userData));
+
+      set({ user: userData, isAuthenticated: true, isLoading: false });
+      return { success: true };
+    } catch (error) {
+      set({ isLoading: false });
+      return { 
+        success: false, 
+        message: error.response?.data || 'Error al iniciar sesión' 
+      };
     }
-    return false;
   },
 
-  logout: () => set({ user: null, isAuthenticated: false }),
-
-  createUser: (newUser) => {
-    set((state) => ({
-      usersList: [...state.usersList, { ...newUser, id: Date.now() }]
-    }));
+  logout: () => {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    set({ user: null, isAuthenticated: false });
   },
-
-  deleteUser: (userId) => {
-    set((state) => ({
-      usersList: state.usersList.filter(u => u.id !== userId)
-    }));
-  }
 }));
-
-// Exportación por defecto añadida para evitar errores de importación en NavBar
-export default useAuthStore;

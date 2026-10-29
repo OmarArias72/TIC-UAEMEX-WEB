@@ -1,5 +1,5 @@
 import React from 'react';
-import useAuthStore from '../store/authStore';
+import { useAuthStore } from '../store/authStore';
 
 export default function LandingPage() {
   const { user, isAuthenticated } = useAuthStore();
